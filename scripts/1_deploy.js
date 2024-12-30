@@ -1,13 +1,20 @@
 async function main() {
+  console.log(`Preparing deployment...\n`)
 
-  const Token = await ethers.getContractFactory("Token")
+  const Token = await ethers.getContractFactory('Token')
 
-  const token = await Token.deploy()
-  await token.deployed()
-  console.log(`Token Deployed to: ${token.address}`)
+  const accounts = await ethers.getSigners()
+
+  console.log(`Accounts fetched:\n${accounts[0].address}\n${accounts[1].address}\n`)
+
+  const fmvm = await Token.deploy('Friendly Meme Vending Machine', 'FMVM', '1000000000')
+  await fmvm.deployed()
+  console.log(`FMVM Deployed to: ${fmvm.address}`)
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exitCode = 1;
-});
+main()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
